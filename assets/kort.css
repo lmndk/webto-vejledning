@@ -1,0 +1,50 @@
+/* Webto Vejledning - kortet i Webto Dashboards kontrolpanel (rammen og .wd-*-klasserne kommer fra dashboardet). */
+.wv--kort .wv-search {
+	margin: 0 0 16px;
+}
+
+.wv--kort .wv-search__count {
+	margin: 8px 0 0;
+	color: #50575e;
+}
+
+.wv--kort .wv-search__count:empty {
+	display: none;
+}
+
+.wv--kort .wv-list {
+	margin: 8px 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.wv--kort .wv-list li {
+	margin: 0;
+}
+
+.wv--kort .wv-list__link {
+	display: block;
+	min-height: 44px;
+	padding: 8px 0;
+	border-bottom: 1px solid #dcdcde;
+	text-decoration: none;
+}
+
+.wv--kort .wv-list__title {
+	display: block;
+	font-weight: 600;
+}
+
+.wv--kort .wv-list__link:hover .wv-list__title {
+	text-decoration: underline;
+}
+
+.wv--kort .wv-list__resume {
+	display: block;
+	color: #50575e;
+	font-size: 13px;
+}
+
+.wv--kort [hidden] {
+	display: none !important;
+}

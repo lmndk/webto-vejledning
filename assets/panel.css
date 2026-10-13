@@ -1,0 +1,342 @@
+/*
+ * Webto Vejledning - panelet "Vejledning til denne side" på sitet (kun for brugere, der er logget ind).
+ * Panelet skal se ens ud på ethvert tema, så det nulstiller selv det vigtigste og bruger WordPress' adminfarve.
+ */
+
+.wv-panel {
+	--wv-accent: var(--wp-admin-theme-color, #2271b1);
+	--wv-text: #1e1e1e;
+	--wv-muted: #50575e;
+	--wv-border: #dcdcde;
+	--wv-soft: #f6f7f7;
+	position: fixed;
+	inset: 0 0 0 auto;
+	box-sizing: border-box;
+	width: min(480px, 100vw);
+	max-width: 100vw;
+	height: 100%;
+	max-height: 100%;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background: #fff;
+	color: var(--wv-text);
+	box-shadow: -8px 0 32px rgb(0 0 0 / 0.18);
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	font-size: 15px;
+	line-height: 1.55;
+	text-align: left;
+}
+
+.wv-panel[open] {
+	display: flex;
+	flex-direction: column;
+}
+
+.wv-panel::backdrop {
+	background: rgb(0 0 0 / 0.35);
+}
+
+.wv-panel *,
+.wv-panel *::before,
+.wv-panel *::after {
+	box-sizing: border-box;
+}
+
+.wv-panel :focus-visible {
+	outline: 2px solid var(--wv-accent);
+	outline-offset: 2px;
+}
+
+.wv-panel a {
+	color: var(--wv-accent);
+	text-decoration: underline;
+	text-underline-offset: 2px;
+}
+
+.wv-panel__head {
+	display: flex;
+	gap: 12px;
+	align-items: center;
+	justify-content: space-between;
+	padding: 12px 20px;
+	border-bottom: 1px solid var(--wv-border);
+}
+
+.wv-panel__title {
+	margin: 0;
+	color: var(--wv-text);
+	font-family: inherit;
+	font-size: 18px;
+	font-weight: 600;
+	line-height: 1.3;
+}
+
+.wv-panel__title:focus {
+	outline: none;
+}
+
+.wv-panel__close {
+	min-width: 44px;
+	min-height: 44px;
+	margin: 0;
+	padding: 0 16px;
+	border: 1px solid #8c8f94;
+	border-radius: 4px;
+	background: #fff;
+	color: var(--wv-text);
+	font: inherit;
+	font-size: 14px;
+	cursor: pointer;
+}
+
+.wv-panel__close:hover {
+	border-color: var(--wv-text);
+}
+
+.wv-panel__body {
+	flex: 1;
+	overflow-y: auto;
+	padding: 16px 20px;
+	overscroll-behavior: contain;
+}
+
+.wv-panel__foot {
+	padding: 12px 20px;
+	border-top: 1px solid var(--wv-border);
+}
+
+.wv-panel__all {
+	display: inline-flex;
+	align-items: center;
+	min-height: 44px;
+	font-weight: 600;
+}
+
+.wv-panel__intro {
+	margin: 0 0 8px;
+	color: var(--wv-muted);
+	font-size: 14px;
+}
+
+/* Søgning */
+.wv-panel .wv-search {
+	margin: 0 0 24px;
+}
+
+.wv-panel .wv-search__label {
+	display: block;
+	margin: 0 0 4px;
+	font-size: 14px;
+	font-weight: 600;
+}
+
+.wv-panel .wv-search__input {
+	width: 100%;
+	min-height: 44px;
+	margin: 0;
+	padding: 8px 12px;
+	border: 1px solid #8c8f94;
+	border-radius: 4px;
+	background: #fff;
+	color: var(--wv-text);
+	font: inherit;
+	font-size: 16px;
+}
+
+.wv-panel .wv-search__count {
+	margin: 8px 0 0;
+	color: var(--wv-muted);
+	font-size: 14px;
+}
+
+.wv-panel .wv-search__count:empty {
+	display: none;
+}
+
+.wv-panel .wv-list {
+	margin: 8px 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.wv-panel .wv-list li {
+	margin: 0;
+}
+
+.wv-panel .wv-list__link {
+	display: block;
+	min-height: 44px;
+	padding: 8px 0;
+	border-bottom: 1px solid var(--wv-border);
+	color: var(--wv-text);
+	text-decoration: none;
+}
+
+.wv-panel .wv-list__title {
+	display: block;
+	color: var(--wv-accent);
+	font-weight: 600;
+}
+
+.wv-panel .wv-list__link:hover .wv-list__title {
+	text-decoration: underline;
+}
+
+.wv-panel .wv-list__resume {
+	display: block;
+	color: var(--wv-muted);
+	font-size: 13px;
+}
+
+/* Vejledningerne til siden */
+.wv-acc__item {
+	margin: 0 0 8px;
+	border: 1px solid var(--wv-border);
+	border-radius: 8px;
+}
+
+.wv-acc__summary {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px 8px;
+	align-items: baseline;
+	min-height: 44px;
+	padding: 12px 16px;
+	cursor: pointer;
+	list-style: none;
+}
+
+.wv-acc__summary::-webkit-details-marker {
+	display: none;
+}
+
+.wv-acc__summary::before {
+	content: "+";
+	width: 1em;
+	color: var(--wv-muted);
+	font-weight: 600;
+}
+
+.wv-acc__item[open] > .wv-acc__summary::before {
+	content: "-";
+}
+
+.wv-acc__title {
+	font-weight: 600;
+}
+
+.wv-acc__cat {
+	color: var(--wv-muted);
+	font-size: 13px;
+}
+
+.wv-panel .wv-body {
+	padding: 0 16px 16px;
+	font-size: 15px;
+	line-height: 1.6;
+}
+
+.wv-panel .wv-body h2 {
+	margin: 20px 0 8px;
+	color: var(--wv-text);
+	font-family: inherit;
+	font-size: 16px;
+	font-weight: 600;
+	line-height: 1.35;
+}
+
+.wv-panel .wv-body h3,
+.wv-panel .wv-body h4 {
+	margin: 16px 0 4px;
+	font-family: inherit;
+	font-size: 15px;
+	font-weight: 600;
+}
+
+.wv-panel .wv-body p,
+.wv-panel .wv-body ul,
+.wv-panel .wv-body ol {
+	margin: 0 0 12px;
+}
+
+.wv-panel .wv-body ul {
+	padding-left: 20px;
+	list-style: disc;
+}
+
+.wv-panel .wv-body ol {
+	padding-left: 24px;
+	list-style: decimal;
+}
+
+.wv-panel .wv-body li {
+	margin: 4px 0;
+}
+
+.wv-panel .wv-body img {
+	display: block;
+	max-width: 100%;
+	height: auto;
+	border-radius: 4px;
+}
+
+.wv-panel .wv-tip {
+	margin: 12px 0;
+	padding: 12px 16px;
+	border-left: 4px solid var(--wv-accent);
+	border-radius: 4px;
+	background: #f0f6fc;
+}
+
+.wv-panel .wv-tip > :last-child {
+	margin-bottom: 0;
+}
+
+.wv-panel .wv-type {
+	color: var(--wv-muted);
+	font-size: 13px;
+}
+
+.wv-panel .wv-table {
+	overflow-x: auto;
+}
+
+.wv-panel table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 14px;
+}
+
+.wv-panel th,
+.wv-panel td {
+	padding: 6px 8px 6px 0;
+	border-bottom: 1px solid var(--wv-border);
+	text-align: left;
+}
+
+.wv-panel .wv-swatch {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	border: 1px solid rgb(0 0 0 / 0.2);
+	border-radius: 4px;
+	vertical-align: -3px;
+}
+
+.wv-panel code {
+	padding: 2px 4px;
+	border-radius: 4px;
+	background: var(--wv-soft);
+	font-size: 0.9em;
+}
+
+.wv-panel .screen-reader-text {
+	position: absolute !important;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	white-space: nowrap;
+}

@@ -1,0 +1,475 @@
+/*
+ * Webto Vejledning - wp-admin. WordPress' adminfarve (--wp-admin-theme-color), systemskrift og et 4 px-gitter.
+ * Klikflader mindst 44 px, synligt fokus, kontrast mindst 4.5:1.
+ */
+
+.wv {
+	--wv-accent: var(--wp-admin-theme-color, #2271b1);
+	--wv-text: #1e1e1e;
+	--wv-muted: #50575e;
+	--wv-border: #dcdcde;
+	--wv-soft: #f6f7f7;
+	--wv-radius: 8px;
+	max-width: 1200px;
+	color: var(--wv-text);
+}
+
+.wv :focus-visible {
+	outline: 2px solid var(--wv-accent);
+	outline-offset: 2px;
+	box-shadow: none;
+}
+
+.wv-title {
+	margin: 0 0 4px;
+	padding: 0;
+	font-size: 24px;
+	font-weight: 600;
+	line-height: 1.3;
+}
+
+.wv .wp-header-end {
+	margin: 0;
+}
+
+.wv-lead {
+	max-width: 68ch;
+	margin: 0 0 24px;
+	color: var(--wv-muted);
+	font-size: 15px;
+	line-height: 1.5;
+}
+
+.wv-back {
+	margin: 8px 0 16px;
+}
+
+.wv-back a {
+	display: inline-flex;
+	align-items: center;
+	min-height: 44px;
+	font-size: 14px;
+}
+
+/* --- Søgning --- */
+.wv-search {
+	margin: 0 0 32px;
+	padding: 16px;
+	border: 1px solid var(--wv-border);
+	border-radius: var(--wv-radius);
+	background: #fff;
+}
+
+.wv-search__label {
+	display: block;
+	margin: 0 0 8px;
+	font-size: 14px;
+	font-weight: 600;
+}
+
+.wv-search__input,
+.wv input.wv-search__input {
+	width: 100%;
+	min-height: 44px;
+	padding: 8px 12px;
+	border: 1px solid #8c8f94;
+	border-radius: 4px;
+	font-size: 16px;
+	line-height: 1.5;
+}
+
+.wv-search__count {
+	margin: 8px 0 0;
+	color: var(--wv-muted);
+}
+
+.wv-search__count:empty {
+	display: none;
+}
+
+.wv-search__results {
+	margin-top: 8px;
+}
+
+/* --- Oversigt --- */
+.wv-cats {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+	gap: 24px;
+	align-items: start;
+}
+
+.wv-cat {
+	padding: 16px 16px 8px;
+	border: 1px solid var(--wv-border);
+	border-radius: var(--wv-radius);
+	background: #fff;
+}
+
+.wv-cat--here {
+	margin: 0 0 24px;
+	border-color: var(--wv-accent);
+}
+
+.wv-cat__title {
+	margin: 0 0 8px;
+	font-size: 16px;
+	font-weight: 600;
+}
+
+.wv-list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.wv-list li {
+	margin: 0;
+}
+
+.wv-list__link {
+	display: block;
+	min-height: 44px;
+	margin: 0 -12px;
+	padding: 8px 12px;
+	border-radius: 4px;
+	color: var(--wv-text);
+	text-decoration: none;
+	box-sizing: border-box;
+}
+
+.wv-list__link:hover {
+	background: var(--wv-soft);
+}
+
+.wv-list__link[aria-current="page"] {
+	background: var(--wv-soft);
+	box-shadow: inset 3px 0 0 var(--wv-accent);
+}
+
+.wv-list__title {
+	display: block;
+	color: var(--wv-accent);
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 1.4;
+}
+
+.wv-list__link:hover .wv-list__title {
+	text-decoration: underline;
+}
+
+.wv-list__resume {
+	display: block;
+	margin-top: 4px;
+	color: var(--wv-muted);
+	font-size: 13px;
+	line-height: 1.45;
+}
+
+.wv-list--compact .wv-list__link {
+	min-height: 0;
+	padding-block: 8px;
+}
+
+.wv-foot {
+	margin: 32px 0 0;
+}
+
+/* --- Én vejledning --- */
+.wv-layout {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: 32px;
+	align-items: start;
+}
+
+@media (min-width: 1024px) {
+	.wv-layout {
+		grid-template-columns: minmax(0, 760px) minmax(240px, 300px);
+	}
+
+	.wv-nav {
+		position: sticky;
+		top: 48px;
+	}
+}
+
+.wv-article {
+	padding: 24px;
+	border: 1px solid var(--wv-border);
+	border-radius: var(--wv-radius);
+	background: #fff;
+}
+
+@media (min-width: 782px) {
+	.wv-article {
+		padding: 32px 40px;
+	}
+}
+
+.wv-kicker {
+	margin: 0 0 4px;
+	color: var(--wv-muted);
+	font-size: 13px;
+}
+
+.wv-nav {
+	padding: 16px 16px 8px;
+	border: 1px solid var(--wv-border);
+	border-radius: var(--wv-radius);
+	background: #fff;
+}
+
+.wv-nav__title {
+	margin: 0 0 8px;
+	font-size: 14px;
+	font-weight: 600;
+}
+
+/* Brødtekst (også i panelet på sitet - panel.css har en kopi af de vigtigste regler). */
+.wv-body {
+	max-width: 68ch;
+	margin-top: 16px;
+	font-size: 15px;
+	line-height: 1.6;
+}
+
+.wv-body h2 {
+	margin: 32px 0 8px;
+	font-size: 18px;
+	font-weight: 600;
+	line-height: 1.35;
+}
+
+.wv-body h3,
+.wv-body h4 {
+	margin: 24px 0 8px;
+	font-size: 15px;
+	font-weight: 600;
+}
+
+.wv-body > :first-child {
+	margin-top: 0;
+}
+
+.wv-body p,
+.wv-body ul,
+.wv-body ol {
+	margin: 0 0 12px;
+	font-size: inherit;
+	line-height: inherit;
+}
+
+.wv-body ul {
+	padding-left: 20px;
+	list-style: disc;
+}
+
+.wv-body ol {
+	padding-left: 24px;
+	list-style: decimal;
+}
+
+.wv-body li {
+	margin: 4px 0;
+}
+
+.wv-body img {
+	max-width: 100%;
+	height: auto;
+	border: 1px solid var(--wv-border);
+	border-radius: 4px;
+}
+
+.wv-body code {
+	padding: 2px 4px;
+	border-radius: 4px;
+	background: var(--wv-soft);
+	font-size: 0.9em;
+}
+
+.wv-body pre {
+	overflow-x: auto;
+	padding: 12px;
+	border-radius: 4px;
+	background: var(--wv-soft);
+}
+
+.wv-tip {
+	margin: 16px 0;
+	padding: 12px 16px;
+	border-left: 4px solid var(--wv-accent);
+	border-radius: 4px;
+	background: #f0f6fc;
+}
+
+.wv-tip > :last-child {
+	margin-bottom: 0;
+}
+
+.wv-type {
+	color: var(--wv-muted);
+	font-size: 13px;
+}
+
+.wv-table {
+	overflow-x: auto;
+	margin: 0 0 16px;
+}
+
+.wv-body .wv-table table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 14px;
+}
+
+.wv-body .wv-table th,
+.wv-body .wv-table td {
+	padding: 8px 12px 8px 0;
+	border-bottom: 1px solid var(--wv-border);
+	text-align: left;
+	vertical-align: top;
+}
+
+.wv-body .wv-table th {
+	font-weight: 600;
+}
+
+.wv-swatch {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	margin-right: 4px;
+	border: 1px solid rgb(0 0 0 / 0.2);
+	border-radius: 4px;
+	vertical-align: -3px;
+}
+
+.wv-meta {
+	margin-top: 32px;
+	padding-top: 16px;
+	border-top: 1px solid var(--wv-border);
+}
+
+.wv-badge {
+	display: inline-block;
+	margin: 0 0 12px;
+	padding: 2px 8px;
+	border-radius: 999px;
+	background: #fcf9e8;
+	color: #614a19;
+	font-size: 12px;
+}
+
+.wv-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	align-items: center;
+	margin: 0;
+}
+
+.wv-actions form {
+	margin: 0;
+}
+
+.wv .button {
+	min-height: 40px;
+	line-height: 38px;
+}
+
+.wv .wv-button-danger {
+	border-color: #b32d2e;
+	color: #b32d2e;
+}
+
+.wv .wv-button-danger:hover,
+.wv .wv-button-danger:focus {
+	border-color: #8a2424;
+	background: #fcf0f1;
+	color: #8a2424;
+}
+
+/* --- Skriv / ret --- */
+.wv-form {
+	max-width: 900px;
+}
+
+.wv-field {
+	margin: 0 0 16px;
+}
+
+.wv-field > label {
+	display: block;
+	margin: 0 0 4px;
+	font-weight: 600;
+}
+
+.wv-field input[type="text"],
+.wv-field select {
+	min-height: 40px;
+}
+
+.wv-help {
+	display: block;
+	margin-top: 4px;
+	color: var(--wv-muted);
+	font-size: 13px;
+}
+
+/* --- Dækning --- */
+.wv-summary {
+	margin: 0 0 24px;
+	padding: 12px 16px;
+	border: 1px solid var(--wv-border);
+	border-left-width: 4px;
+	border-radius: 4px;
+	background: #fff;
+}
+
+.wv-summary p {
+	margin: 0;
+	font-size: 14px;
+}
+
+.wv-summary--ok {
+	border-left-color: #00a32a;
+}
+
+.wv-summary--todo {
+	border-left-color: #dba617;
+}
+
+.wv--coverage h2 {
+	margin: 32px 0 8px;
+	font-size: 16px;
+}
+
+.wv-details {
+	margin-top: 32px;
+}
+
+.wv-details summary {
+	min-height: 44px;
+	font-weight: 600;
+	line-height: 44px;
+	cursor: pointer;
+}
+
+.wv-pre {
+	overflow-x: auto;
+	padding: 12px;
+	border: 1px solid var(--wv-border);
+	border-radius: 4px;
+	background: #fff;
+	font-size: 12px;
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.wv * {
+		transition: none !important;
+	}
+}
