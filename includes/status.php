@@ -3,8 +3,8 @@
  * Status: hvad mangler en vejledning, og hvilke vejledninger er forældede? Samme svar i ability, WP-CLI og wp-admin.
  *
  * Dækning: hver af sitets blokke, egne indholdstyper (og Indlæg/Sider/Medier), ACF-feltgrupper, menupladser, aktive
- * plugins og funktioner (filteret webto_vejledning_funktioner) skal have en SKREVET vejledning, hvis "gaelder" nævner
- * den. Automatiske vejledninger tæller ikke (de er kun et sikkerhedsnet).
+ * plugins, funktioner (filteret webto_vejledning_funktioner) og sitets egne blokgrupper (temaets og de synkroniserede)
+ * skal have en SKREVET vejledning, hvis "gaelder" nævner den. Automatiske vejledninger tæller ikke (de er kun et sikkerhedsnet).
  * Forældet: en af vejledningens "kilder" (filer i temaet) er ændret efter vejledningen (opdateret, filens egen
  * ændringstid eller rettelsen i wp-admin - det seneste af dem), eller kilden findes ikke længere.
  *
@@ -62,6 +62,11 @@ function webto_vejledning_krav(): array {
 				$add( 'feltgruppe', 'feltgruppe:' . $group['key'], (string) $group['title'], 'vejledning/felter-' . sanitize_title( (string) $group['title'] ) . '.md', '', is_file( get_stylesheet_directory() . '/acf-json/' . $group['key'] . '.json' ) ? array( 'acf-json/' . $group['key'] . '.json' ) : array() );
 			}
 		}
+	}
+
+	// Sitets egne blokgrupper (temaets patterns/ og synkroniserede blokgrupper): beskrives i vejledning/blokgrupper.md.
+	foreach ( webto_vejledning_site_patterns() as $key => $pattern ) {
+		$add( 'blokgruppe', $key, $pattern['titel'], 'vejledning/blokgrupper.md', 'site/blokgrupper', '' !== $pattern['fil'] ? array( $pattern['fil'] ) : array() );
 	}
 
 	foreach ( get_registered_nav_menus() as $slug => $label ) {
@@ -261,12 +266,13 @@ function webto_vejledning_instructions(): string {
 	return implode(
 		"\n",
 		array(
-			'Webto Vejledning: hver ny funktion, blok, indholdstype, menuplads, feltgruppe eller plugin skal have en vejledning til kunden, og en rettelse i koden skal følges af en opdateret vejledning. Status skal være 0, før opgaven er færdig.',
+			'Webto Vejledning: hver ny funktion, blok, indholdstype, menuplads, feltgruppe, blokgruppe eller plugin skal have en vejledning til kunden, og en rettelse i koden skal følges af en opdateret vejledning. Status skal være 0, før opgaven er færdig.',
 			'',
 			'HVOR:',
 			"- En blok: blocks/<blok>/vejledning.md i temaet (wp-content/themes/$theme/). Feltlisten kommer automatisk fra ACF; skriv kun det, felterne ikke selv siger.",
 			"- Alt andet: vejledning/<navn>.md i temaet. Brug filnavnet i 'forslag' fra status.",
 			"- Udvider en fil en automatisk vejledning (status viser 'udvider', fx site/menuer-og-header eller posttype/case), så skriv 'udvider: <id>' i frontmatter; så erstatter din tekst den automatiske.",
+			"- Blokgrupper (temaets patterns/ og synkroniserede blokgrupper): beskriv dem alle i vejledning/blokgrupper.md med 'udvider: site/blokgrupper' og hver blokgruppes nøgle (blokgruppe:<navn>) i gaelder: hvad hver side og sektion er til. Listen over blokgrupperne kommer automatisk med.",
 			'- Har du adgang til temaets filer (fx i projektmappen på homelab: ~/projects/<projekt>/.../tema/webto/), så skriv filen direkte og læg den i git sammen med koden. Ellers: brug ability webto-vejledning/gem (skriver filen, eller gemmer i databasen, hvis temaet ikke kan skrives).',
 			'',
 			'FRONTMATTER: titel, kategori, resume, gaelder (nøglerne fra status), kilder (filerne i temaet, vejledningen beskriver - så kan status se, når koden ændres), opdateret (dato og klokkeslæt NU, ÅÅÅÅ-MM-DD TT:MM). Ret "opdateret", hver gang du har tjekket vejledningen mod koden.',

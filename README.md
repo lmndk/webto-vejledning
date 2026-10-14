@@ -20,7 +20,7 @@ Kundens vejledning i wp-admin og på sitet. Kun for brugere, der er logget ind (
 | Kilde | Hvor | Id |
 |---|---|---|
 | Faste | `indhold/*.md` i pluginnet (følger med opdateringer) | `fast/<fil>` |
-| Automatiske | hver blok i temaets `blocks/`, egne indholdstyper (`show_in_menu === true`), menuer og header | `blok/<navn>`, `posttype/<navn>`, `site/menuer-og-header` |
+| Automatiske | hver blok i temaets `blocks/`, egne indholdstyper (`show_in_menu === true`), menuer og header, sitets blokgrupper (temaets `patterns/` + synkroniserede `wp_block`; listen bliver stående, når temaet udvider den) | `blok/<navn>`, `posttype/<navn>`, `site/menuer-og-header`, `site/blokgrupper` |
 | Blokkens tekst | `blocks/<blok>/vejledning.md` i temaet (erstatter den automatiske tekst; feltlisten fra ACF bliver) | `blok/<navn>` |
 | Sitets egne | `vejledning/*.md` i temaet (skrevet af AI'en). Med `udvider: <id>` erstatter den en automatisk | `tema/<fil>` |
 | Andre | filteret `webto_vejledning_sources` | valgfrit |
@@ -29,7 +29,7 @@ Kundens vejledning i wp-admin og på sitet. Kun for brugere, der er logget ind (
 Frontmatter: `titel`, `kategori` (navn eller slug), `resume`, `gaelder` (liste), `kilder` (filer relativt til temaet;
 en mappe slutter med /), `opdateret` (ÅÅÅÅ-MM-DD TT:MM, sitets tid), valgfrit `udvider` og `raekkefoelge`.
 
-Nøgler i `gaelder`: `blok:<navn>`, `posttype:<navn>`, `side:<id>`, `menu:<plads>`, `plugin:<mappe>`,
+Nøgler i `gaelder`: `blok:<navn>`, `posttype:<navn>`, `side:<id>`, `menu:<plads>`, `plugin:<mappe>`, `blokgruppe:<slug>`,
 `feltgruppe:<nøgle>`, `funktion:<navn>`.
 
 Markdown: overskrifter, afsnit, lister, `> ` tip-boks, tabeller, **fed**, *kursiv*, `kode`, links og billeder.
@@ -39,8 +39,12 @@ Særlige adresser: `admin:edit.php?post_type=page`, `vejledning:<id>`, `billede:
 
 ## Dækning og forældet
 - Skal have en skrevet vejledning: hver af temaets blokke, Indlæg/Sider/Medier og egne indholdstyper, ACF-feltgrupper,
-  der ikke hører til en blok eller egen indholdstype, menupladser, aktive plugins (ikke `webto-*`) og funktioner fra
-  filteret `webto_vejledning_funktioner`. Automatiske vejledninger tæller ikke.
+  der ikke hører til en blok eller egen indholdstype, menupladser, aktive plugins (ikke `webto-*`), funktioner fra
+  filteret `webto_vejledning_funktioner` og sitets egne blokgrupper (temaets `patterns/` via
+  `WP_Theme::get_block_patterns()` - registret mister filstien, når indholdet er hentet - og synkroniserede `wp_block`;
+  forslag `vejledning/blokgrupper.md` med `udvider: site/blokgrupper`). Automatiske vejledninger tæller ikke.
+- Fast vejledning `fast/wordpress-blokgrupper` ("Sådan bruger du blokgrupper"): ny side fra en skabelon, sektion fra
+  blokvælgeren, synkroniseret fælles indhold (Rediger original, Frigør), egne blokgrupper (Opret blokgruppe).
 - Forældet: en kilde er ændret efter det seneste af `opdateret`, filens ændringstid og rettelsen i wp-admin.
 - Samme svar tre steder: ability `webto-vejledning/status`, `wp webto vejledning status` (fejlkode 1, når noget
   mangler) og siden **Dækning**.

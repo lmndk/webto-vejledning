@@ -11,7 +11,8 @@
  *
  * Kilder i rækkefølge (en senere kilde med samme id vinder):
  *   1. Faste vejledninger i pluginnet: indhold/*.md (id fast/<fil>).
- *   2. Automatiske: hver webto-blok (blok/<navn>), hver egen indholdstype (posttype/<navn>), menuer og header.
+ *   2. Automatiske: hver webto-blok (blok/<navn>), hver egen indholdstype (posttype/<navn>), menuer og header,
+ *      sitets blokgrupper (site/blokgrupper).
  *   3. Sitets egne filer: temaets vejledning/*.md (id tema/<fil>) og blokkenes blocks/<blok>/vejledning.md.
  *      En temafil med "udvider: posttype/case" (eller site/menuer-og-header) erstatter teksten i den automatiske.
  *   4. Filteret webto_vejledning_sources (fremtidige funktioner og plugins kan melde deres egne vejledninger).
@@ -319,7 +320,53 @@ function webto_vejledning_site_post_types(): array {
 }
 
 /**
- * De automatiske vejledninger (blokke, indholdstyper, menuer og header).
+ * Sitets egne blokgrupper: temaets (filer i temaets patterns/) og de synkroniserede, der er lavet på sitet (wp_block).
+ * WordPress' egne og plugins' blokgrupper tæller ikke med.
+ *
+ * @return array<string, array{noegle: string, titel: string, beskrivelse: string, type: string, fil: string}> Nøgle (blokgruppe:...) => blokgruppen.
+ */
+function webto_vejledning_site_patterns(): array {
+	$out = array();
+	// Temaets egen liste over blokgruppe-filer (WordPress fjerner filstien fra registret, når indholdet er hentet, så
+	// registret kan ikke bruges til at se, hvor en blokgruppe kommer fra). Barnetema først, så forældretemaet.
+	$themes = array_unique( array( get_stylesheet(), get_template() ) );
+	foreach ( $themes as $stylesheet ) {
+		$theme = wp_get_theme( $stylesheet );
+		if ( ! $theme->exists() || ! method_exists( $theme, 'get_block_patterns' ) ) {
+			continue;
+		}
+		foreach ( (array) $theme->get_block_patterns() as $file => $pattern ) {
+			if ( empty( $pattern['slug'] ) ) {
+				continue;
+			}
+			$key = 'blokgruppe:' . $pattern['slug'];
+			if ( isset( $out[ $key ] ) ) {
+				continue; // Barnetemaets vinder.
+			}
+			$out[ $key ] = array(
+				'noegle'      => $key,
+				'titel'       => (string) ( $pattern['title'] ?? $pattern['slug'] ),
+				'beskrivelse' => (string) ( $pattern['description'] ?? '' ),
+				'type'        => in_array( 'core/post-content', (array) ( $pattern['blockTypes'] ?? array() ), true ) ? 'side' : 'sektion',
+				'fil'         => 'patterns/' . $file,
+			);
+		}
+	}
+	foreach ( get_posts( array( 'post_type' => 'wp_block', 'post_status' => 'publish', 'numberposts' => 200, 'orderby' => 'title', 'order' => 'ASC' ) ) as $post ) {
+		$key         = 'blokgruppe:' . ( '' !== $post->post_name ? $post->post_name : 'wp_block-' . $post->ID );
+		$out[ $key ] = array(
+			'noegle'      => $key,
+			'titel'       => '' !== $post->post_title ? $post->post_title : __( '(uden titel)', 'webto-vejledning' ),
+			'beskrivelse' => '',
+			'type'        => 'unsynced' === get_post_meta( $post->ID, 'wp_pattern_sync_status', true ) ? 'egen' : 'faelles',
+			'fil'         => '',
+		);
+	}
+	return $out;
+}
+
+/**
+ * De automatiske vejledninger (blokke, indholdstyper, menuer og header, blokgrupper).
  *
  * @return array<string, array<string, mixed>>
  */
@@ -438,6 +485,42 @@ function webto_vejledning_auto(): array {
 			'kilde'        => 'auto',
 			'skrevet'      => false,
 			'raekkefoelge' => 20,
+		);
+	}
+
+	// Sitets blokgrupper: altid den aktuelle liste (bliver stående, når temaet har sin egen tekst med
+	// "udvider: site/blokgrupper").
+	$patterns = webto_vejledning_site_patterns();
+	if ( $patterns ) {
+		$groups = array(
+			'side'    => __( 'Sider (vælges, når du opretter en ny side)', 'webto-vejledning' ),
+			'sektion' => __( 'Sektioner (sættes ind på en side)', 'webto-vejledning' ),
+			'faelles' => __( 'Fælles indhold (rettes ét sted og opdateres alle steder)', 'webto-vejledning' ),
+			'egen'    => __( 'Dine egne blokgrupper', 'webto-vejledning' ),
+		);
+		$list   = '<h2>' . esc_html__( 'Blokgrupperne på dit site', 'webto-vejledning' ) . '</h2>';
+		foreach ( $groups as $type => $label ) {
+			$in = array_filter( $patterns, static fn( $p ) => $p['type'] === $type );
+			if ( ! $in ) {
+				continue;
+			}
+			$list .= '<h3>' . esc_html( $label ) . '</h3><ul>';
+			foreach ( $in as $p ) {
+				$list .= '<li><strong>' . esc_html( $p['titel'] ) . '</strong>' . ( '' !== $p['beskrivelse'] ? ': ' . esc_html( $p['beskrivelse'] ) : '' ) . '</li>';
+			}
+			$list .= '</ul>';
+		}
+		$out['site/blokgrupper'] = array(
+			'id'           => 'site/blokgrupper',
+			'titel'        => __( 'Blokgrupper på dit site', 'webto-vejledning' ),
+			'kategori'     => 'dit-site',
+			'resume'       => __( 'Færdige sider og sektioner at starte fra.', 'webto-vejledning' ),
+			'html'         => '<p>' . esc_html__( 'Blokgrupper er færdige sider og sektioner, som er lavet til dit site. Se vejledningen "Sådan bruger du blokgrupper".', 'webto-vejledning' ) . '</p>',
+			'felter_html'  => $list,
+			'gaelder'      => array_keys( $patterns ),
+			'kilde'        => 'auto',
+			'skrevet'      => false,
+			'raekkefoelge' => 25,
 		);
 	}
 	return $out;
