@@ -3,7 +3,8 @@
  *
  * Indekset ligger enten i siden (<script type="application/json" data-wv-index>) eller hentes første gang, man søger
  * (data-wv-src på søgefeltet, kun for brugere, der er logget ind). Alle ord skal findes; titlen vejer mest.
- * Resultater bygges med textContent (ingen HTML fra indekset).
+ * Resultater bygges med textContent (ingen HTML fra indekset). Med data-wv-url="soeg" står søgeordene i adressen
+ * (oversigten), så "Tilbage" fra en vejledning viser den samme søgning igen.
  */
 ( () => {
 	const norm = ( s ) => String( s || '' ).toLocaleLowerCase( 'da' ).normalize( 'NFKC' );
@@ -22,6 +23,7 @@
 		const count = box.querySelector( '[data-wv-count]' );
 		const browse = scope.querySelector( '[data-wv-browse]' );
 		const inline = scope.querySelector( 'script[data-wv-index]' );
+		const param = box.dataset.wvUrl || '';
 		let index = null;
 		let loading = null;
 		let timer = 0;
@@ -89,8 +91,23 @@
 			return li;
 		}
 
+		// Søgeordene i adressen uden et nyt trin i historikken (tilbage-knappen springer ikke hvert bogstav igennem).
+		function remember( q ) {
+			if ( ! param ) {
+				return;
+			}
+			const url = new URL( window.location.href );
+			if ( q ) {
+				url.searchParams.set( param, q );
+			} else {
+				url.searchParams.delete( param );
+			}
+			window.history.replaceState( window.history.state, '', url );
+		}
+
 		async function render() {
 			const q = input.value.trim();
+			remember( q );
 			if ( ! q ) {
 				list.hidden = true;
 				list.replaceChildren();
@@ -126,9 +143,25 @@
 		input.addEventListener( 'focus', () => {
 			load();
 		}, { once: true } );
+		// Kom man tilbage til en søgning (?soeg=), vises resultaterne med det samme.
+		if ( input.value.trim() ) {
+			render();
+		}
 	}
 
 	document.querySelectorAll( '[data-wv-search]' ).forEach( init );
+
+	// "Tilbage" på en vejledning: som browserens tilbage-knap, så søgningen, de åbne emner og rullepositionen er
+	// som før. Uden historik (fx åbnet i en ny fane) følger knappen bare linket.
+	document.querySelectorAll( '[data-wv-tilbage]' ).forEach( ( link ) => {
+		link.addEventListener( 'click', ( e ) => {
+			if ( e.ctrlKey || e.metaKey || e.shiftKey || 0 !== e.button || ! document.referrer || window.history.length < 2 ) {
+				return;
+			}
+			e.preventDefault();
+			window.history.back();
+		} );
+	} );
 
 	// "Nulstil til standard" / "Slet vejledningen" spørger først.
 	document.querySelectorAll( 'form[data-wv-confirm]' ).forEach( ( form ) => {

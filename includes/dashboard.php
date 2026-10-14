@@ -69,6 +69,23 @@ add_filter(
 	}
 );
 
+// Genvejen "Vejledning" i rækken under kontrolpanelets top.
+add_filter(
+	'webto_dashboard_genveje',
+	static function ( array $shortcuts ): array {
+		if ( webto_vejledning_can_read() ) {
+			$shortcuts[] = array(
+				'id'           => 'vejledning',
+				'titel'        => __( 'Vejledning', 'webto-vejledning' ),
+				'ikon'         => 'dashicons-book-alt',
+				'url'          => admin_url( 'admin.php?page=webto-vejledning' ),
+				'raekkefoelge' => 60,
+			);
+		}
+		return $shortcuts;
+	}
+);
+
 // Søgningen i kortet bruger vejledningens soeg.js (indekset hentes først, når man søger) og lidt CSS til kortet.
 add_action(
 	'admin_enqueue_scripts',

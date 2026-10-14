@@ -40,15 +40,27 @@
 	line-height: 1.5;
 }
 
+/* Tilbage-knappen øverst (derhen, man kom fra). */
 .wv-back {
 	margin: 8px 0 16px;
 }
 
-.wv-back a {
+.wv .button.wv-back__link { /* Vinder over .wv .button længere nede. */
 	display: inline-flex;
+	gap: 4px;
 	align-items: center;
 	min-height: 44px;
+	padding: 0 16px 0 10px;
 	font-size: 14px;
+	line-height: 1.3;
+}
+
+.wv .wv-back__link .dashicons {
+	width: 18px;
+	height: 18px;
+	font-size: 18px;
+	line-height: 1; /* WordPress' .button .dashicons sætter pilen for lavt. */
+	vertical-align: middle;
 }
 
 /* --- Søgning --- */
@@ -112,6 +124,7 @@
 }
 
 .wv-cat__title {
+	scroll-margin-top: 48px; /* Brødkrummen springer hertil; adminbaren må ikke dække overskriften. */
 	margin: 0 0 8px;
 	font-size: 16px;
 	font-weight: 600;
@@ -142,9 +155,13 @@
 	background: var(--wv-soft);
 }
 
+/* Den vejledning, man læser: kun en blød baggrund (ingen streg i siden, Lasse 2026-10-14). */
 .wv-list__link[aria-current="page"] {
 	background: var(--wv-soft);
-	box-shadow: inset 3px 0 0 var(--wv-accent);
+}
+
+.wv-list__link[aria-current="page"] .wv-list__title {
+	color: var(--wv-text);
 }
 
 .wv-list__title {
@@ -189,10 +206,18 @@
 		grid-template-columns: minmax(0, 760px) minmax(240px, 300px);
 	}
 
+	/* Menuen følger med ned ad siden og ruller selv, hvis alle emner er foldet ud. */
 	.wv-nav {
 		position: sticky;
 		top: 48px;
+		overflow-y: auto;
+		max-height: calc(100vh - 64px);
+		overscroll-behavior: contain;
 	}
+}
+
+.wv-main {
+	min-width: 0;
 }
 
 .wv-article {
@@ -208,23 +233,153 @@
 	}
 }
 
-.wv-kicker {
+/* Brødkrummen over titlen: Vejledning / emnet. */
+.wv-crumbs ol {
+	display: flex;
+	flex-wrap: wrap;
 	margin: 0 0 4px;
+	padding: 0;
+	list-style: none;
+	font-size: 13px;
+}
+
+.wv-crumbs li {
+	margin: 0;
+}
+
+.wv-crumbs li + li::before {
+	content: "/";
+	padding: 0 8px;
+	color: var(--wv-muted);
+}
+
+.wv-crumbs a {
+	display: inline-block;
+	padding: 4px 0;
+	color: var(--wv-muted);
+}
+
+.wv-crumbs a:hover {
+	color: var(--wv-accent);
+}
+
+/* Forrige / Næste under vejledningen. */
+.wv-pager {
+	display: grid;
+	gap: 16px;
+	margin-top: 16px;
+}
+
+@media (min-width: 600px) {
+	.wv-pager {
+		grid-template-columns: 1fr 1fr;
+	}
+
+	.wv-pager__link--next {
+		grid-column: 2;
+	}
+}
+
+.wv-pager__link {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	min-height: 44px;
+	padding: 14px 18px;
+	border: 1px solid var(--wv-border);
+	border-radius: var(--wv-radius);
+	background: #fff;
+	color: var(--wv-text);
+	text-decoration: none;
+	box-sizing: border-box;
+}
+
+.wv-pager__link:hover {
+	border-color: var(--wv-accent);
+}
+
+.wv-pager__link--next {
+	align-items: flex-end;
+	text-align: right;
+}
+
+.wv-pager__label {
+	display: inline-flex;
+	align-items: center;
 	color: var(--wv-muted);
 	font-size: 13px;
 }
 
+.wv-pager__label .dashicons {
+	width: 16px;
+	height: 16px;
+	font-size: 16px;
+}
+
+.wv-pager__title {
+	color: var(--wv-accent);
+	font-size: 15px;
+	font-weight: 600;
+	line-height: 1.4;
+}
+
+.wv-pager__link:hover .wv-pager__title {
+	text-decoration: underline;
+}
+
+/* Menuen til højre: søgning og alle emner (emnet for den viste vejledning er foldet ud). */
 .wv-nav {
-	padding: 16px 16px 8px;
+	padding: 16px;
 	border: 1px solid var(--wv-border);
 	border-radius: var(--wv-radius);
 	background: #fff;
 }
 
-.wv-nav__title {
+.wv .wv-search--nav {
 	margin: 0 0 8px;
+	padding: 0;
+	border: 0;
+}
+
+.wv-nav__cat + .wv-nav__cat {
+	border-top: 1px solid var(--wv-border);
+}
+
+.wv-nav__summary {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	min-height: 44px;
 	font-size: 14px;
 	font-weight: 600;
+	list-style: none;
+	cursor: pointer;
+}
+
+.wv-nav__summary::-webkit-details-marker {
+	display: none;
+}
+
+.wv-nav__summary::after {
+	content: "\f347";
+	margin-left: auto;
+	color: var(--wv-muted);
+	font: normal 16px/1 dashicons;
+	transition: transform 0.15s ease;
+}
+
+.wv-nav__cat[open] > .wv-nav__summary::after {
+	transform: rotate(180deg);
+}
+
+.wv-nav__count {
+	color: var(--wv-muted);
+	font-size: 12px;
+	font-weight: 400;
+}
+
+.wv-nav__cat > .wv-list {
+	padding-bottom: 8px;
 }
 
 /* Brødtekst (også i panelet på sitet - panel.css har en kopi af de vigtigste regler). */

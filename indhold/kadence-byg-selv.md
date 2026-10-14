@@ -11,7 +11,7 @@ Kadence-blokkene er til at bygge noget hurtigt selv, fx en sektion med to kolonn
 ## Byg en sektion
 
 1. Klik på plusset, og søg efter **Række-layout**. Vælg, hvor mange kolonner du vil have.
-2. Klik i en kolonne, og sæt blokke ind, fx **Tekst (Adv)** til overskrifter og **Knapper (Adv)** til knapper.
+2. Klik i en kolonne, og sæt blokke ind, fx **Overskrift** og **Afsnit** til tekst og **Knapper (Adv)** til knapper.
 3. Klik på rækken (eller vælg den i **Listevisning**) for at give den en baggrundsfarve eller mere luft.
 4. Klik på **Gem**.
 

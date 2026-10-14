@@ -4,14 +4,17 @@ Kundens vejledning i wp-admin og på sitet. Kun for brugere, der er logget ind (
 (ingen CSS, JS eller panel, og søgeindekset svarer 401). Ren PHP, CSS og lidt vanilla JS. Intet byggetrin.
 
 ## Det ser kunden
-- **Vejledning** i menuen: oversigt i kategorier og en søgning, der svarer med det samme. Hver vejledning har sin egen
-  side. **Ret vejledningen** gemmer en rettelse på sitet, og **Nulstil til standard** sletter den igen.
+- **Vejledning** i menuen: oversigt i kategorier og en søgning, der svarer med det samme (ordene står i adressen,
+  `?soeg=`). Hver vejledning har sin egen side med **Tilbage** derhen, man kom fra (søgningen, kontrolpanelet, en anden
+  vejledning, siden på sitet; ellers oversigten), brødkrumme (Vejledning / emne), **Forrige** / **Næste** i
+  oversigtens rækkefølge og en menu til højre med søgning og alle emner (emnet er foldet ud). **Ret vejledningen** gemmer en rettelse på sitet, og **Nulstil til standard** sletter den igen.
   **Skriv vejledning** laver en ny vejledning. Ret og skriv kræver `edit_others_pages`.
 - **Vejledning** i adminbaren: på sitet åbner den panelet "Vejledning til denne side" (`<dialog>`) med vejledningerne
   til sidens blokke, indholdstype, side og funktioner, plus søgning. I wp-admin åbner den oversigten med "Til den side,
   du kom fra" øverst.
 - **Dækning** (kun Webto: administratorer med en @webto.dk-mail, eller alle på et udviklingssite som homelab - aldrig
   kunden): det samme som `webto-vejledning/status`. Feltet "Vises på" (nøgler) ses også kun af Webto.
+  Filteret `webto_vejledning_er_webto` kan ændre svaret (Webto Dashboards "Se som kunde" bruger det).
 
 ## Kilder og id'er
 | Kilde | Hvor | Id |
@@ -52,6 +55,7 @@ Særlige adresser: `admin:edit.php?post_type=page`, `vejledning:<id>`, `billede:
 ## Webto Dashboard
 Når Webto Dashboard er aktivt, lægger vejledningen sit kort i kontrolpanelet via `webto_dashboard_tiles`
 (`includes/dashboard.php` + `assets/kort.css`): søgning, "Ny her? Start her" og sitets senest opdaterede vejledninger.
+Desuden genvejen **Vejledning** i rækken under toppen (`webto_dashboard_genveje`, rækkefølge 60).
 
 ## Udvidelsespunkter
 `webto_vejledning_sources`, `webto_vejledning_kategorier`, `webto_vejledning_funktioner`, `webto_vejledning_krav`,
@@ -65,8 +69,9 @@ Når Webto Dashboard er aktivt, lægger vejledningen sit kort i kontrolpanelet v
 `abilities.php`, `cli.php`. `assets/`: `vejledning.css` (wp-admin), `panel.css` + `panel.js` (sitet), `soeg.js` (begge).
 
 ## Test
-`hb/tests/t-vejledning.js` i skabelonens repo (44 tjek: søgning, rettelse/nulstil, status via ability og WP-CLI, gem,
-forældet, panelet med fokus/Esc/mobil, axe, besøgende). Testen rydder selv op.
+`hb/tests/t-vejledning.js` i skabelonens repo (47 tjek: søgning, rettelse/nulstil, status via ability og WP-CLI, gem,
+forældet, panelet med fokus/Esc/mobil, axe, besøgende). Testen rydder selv op. `hb/tests/t-vejledning-nav.js` (22 tjek):
+Tilbage fra søgning, oversigt, kontrolpanel, anden vejledning og sitet, brødkrumme, Forrige/Næste, menuen, mobil.
 
 ## Opdateringer
 Fra GitHub via `includes/opdatering.php` (automatisk; kun udgivelsens zip-fil). Kildekoden i skabelonen har markørfilen

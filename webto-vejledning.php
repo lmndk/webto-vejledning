@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Webto Vejledning
  * Description:       Vejledning til dit website: sitets egne funktioner og blokke, WordPress, plugins og Kadence. Kun for brugere, der er logget ind.
- * Version:           1.0.0
+ * Version:           1.1.0
  * Requires at least: 6.9
  * Requires PHP:      8.2
  * Author:            Webto
@@ -17,7 +17,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'WEBTO_VEJLEDNING_VERSION', '1.0.0' );
+define( 'WEBTO_VEJLEDNING_VERSION', '1.1.0' );
 define( 'WEBTO_VEJLEDNING_DIR', __DIR__ );
 define( 'WEBTO_VEJLEDNING_URL', plugin_dir_url( __FILE__ ) );
 
@@ -79,12 +79,15 @@ function webto_vejledning_is_webto(): bool {
 	}
 	$email   = strtolower( (string) wp_get_current_user()->user_email );
 	$domains = (array) apply_filters( 'webto_vejledning_webto_domaener', array( 'webto.dk' ) );
+	$is      = false;
 	foreach ( $domains as $domain ) {
 		if ( str_ends_with( $email, '@' . strtolower( (string) $domain ) ) ) {
-			return true;
+			$is = true;
+			break;
 		}
 	}
-	return webto_vejledning_is_dev_site();
+	// Filteret lader fx Webto Dashboards "Se som kunde" vise siden, som kunden ser den.
+	return (bool) apply_filters( 'webto_vejledning_er_webto', $is || webto_vejledning_is_dev_site() );
 }
 
 /**
