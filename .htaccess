@@ -1,0 +1,6 @@
+# Pluginnets interne filer kan ikke hentes udefra: vejledninger og README (.md) og skjulte filer. Pluginnet læser dem
+# stadig i PHP. Virker på Apache og LiteSpeed; på nginx skal en tilsvarende regel sættes op i serverens konfiguration.
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule (^|/)\.|\.md$ - [F]
+</IfModule>

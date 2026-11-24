@@ -71,6 +71,9 @@ Desuden genvejen **Vejledning** i rækken under toppen (`webto_dashboard_genveje
 `webto-vejledning.php` (indgang, rettigheder, den skjulte indholdstype `webto_vejledning`) og `includes/`:
 `markdown.php`, `kilder.php`, `pladsholdere.php`, `status.php`, `admin.php`, `adminbar.php`, `rest.php`,
 `abilities.php`, `cli.php`. `assets/`: `vejledning.css` (wp-admin), `panel.css` + `panel.js` (sitet), `soeg.js` (begge).
+`.htaccess` spærrer `.md`-filer (vejledningerne i `indhold/`, README) og skjulte filer for besøgende - pluginnet læser
+dem i PHP, så de vises kun i wp-admin (Apache/LiteSpeed; på nginx kræver det en regel i serveren). Temaets
+`vejledning/` og `blocks/*/vejledning.md` spærres af temaets egen `.htaccess`.
 
 ## Test
 `hb/tests/t-vejledning.js` i skabelonens repo (47 tjek: søgning, rettelse/nulstil, status via ability og WP-CLI, gem,
