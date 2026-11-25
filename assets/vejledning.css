@@ -111,6 +111,12 @@
 	align-items: start;
 }
 
+/* Masonry (assets/oversigt.js): rækker på 1 px uden afstand; hvert kort spænder over sin egen højde + afstanden. */
+.wv-cats--masonry {
+	grid-auto-rows: 1px;
+	row-gap: 0;
+}
+
 .wv-cat {
 	padding: 16px 16px 8px;
 	border: 1px solid var(--wv-border);

@@ -4,7 +4,7 @@
  *
  * En vejledning er et array med:
  *   id, titel, kategori (slug), resume, html (brødtekst), felter_html (automatisk feltliste, kan ikke rettes),
- *   gaelder (fx blok:webto/hero, posttype:case, side:42, menu:primary, plugin:wp-seopress, funktion:header-builder,
+ *   gaelder (fx blok:webto/hero, posttype:case, side:42, menu:primary, plugin:seo-by-rank-math, funktion:header-builder,
  *   feltgruppe:group_x), kilder (filer relativt til temaet), opdateret, kilde (fast|auto|tema|blok|egen), fil (sti|''),
  *   markdown (rå brødtekst, når den findes), skrevet (true = skrevet af et menneske/AI, false = kun automatisk),
  *   rettet (true = rettet i wp-admin), post_id (rettelsen eller den egne vejledning), raekkefoelge.

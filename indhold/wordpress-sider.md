@@ -23,7 +23,7 @@ Sider er de faste sider på din hjemmeside, fx Forside, Om os og Kontakt.
 
 Klik på **Side** i panelet til højre (klik på tandhjulet øverst, hvis panelet er skjult):
 
-- **Link**: sidens adresse. Ændrer du den på en side, der allerede er udgivet, så lav en omdirigering fra den gamle adresse. Se [Redirection](vejledning:fast/plugin-redirection).
+- **Link**: sidens adresse. Ændrer du den på en side, der allerede er udgivet, laver Rank Math selv en omdirigering fra den gamle adresse. Se [Omdirigeringer](vejledning:fast/plugin-omdirigeringer).
 - **Overordnet**: læg siden under en anden side, fx "Kontakt" under "Om os".
 - **Synlighed**: offentlig, privat (kun for dig og andre, der er logget ind) eller beskyttet med en adgangskode.
 

@@ -51,6 +51,7 @@ add_action(
 		}
 		wp_enqueue_style( 'webto-vejledning', WEBTO_VEJLEDNING_URL . 'assets/vejledning.css', array(), webto_vejledning_asset_version( 'assets/vejledning.css' ) );
 		wp_enqueue_script( 'webto-vejledning-soeg', WEBTO_VEJLEDNING_URL . 'assets/soeg.js', array(), webto_vejledning_asset_version( 'assets/soeg.js' ), array( 'in_footer' => true, 'strategy' => 'defer' ) );
+		wp_enqueue_script( 'webto-vejledning-oversigt', WEBTO_VEJLEDNING_URL . 'assets/oversigt.js', array(), webto_vejledning_asset_version( 'assets/oversigt.js' ), array( 'in_footer' => true, 'strategy' => 'defer' ) );
 	}
 );
 
