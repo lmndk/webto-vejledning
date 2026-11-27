@@ -8,6 +8,7 @@
  *   Den forrige version ligger altid på GitHub, så den kan installeres igen.
  * - Kildekoden i skabelonen (markørfilen .udvikling) opdateres aldrig: dér tjekkes der slet ikke.
  * - GitHub-ejeren sættes i WEBTO_VEJLEDNING_GITHUB (eller filteret webto_vejledning_github). Er den tom, tjekkes der ikke.
+ * - Privat repo: læse-nøglen fra wp-config.php (WEBTO_VEJLEDNING_GITHUB_TOKEN / WEBTO_GITHUB_TOKEN) eller includes/noegle.php.
  *
  * @package Webto_Vejledning
  */
@@ -26,6 +27,19 @@ function webto_vejledning_is_source(): bool {
 	return file_exists( WEBTO_VEJLEDNING_DIR . '/.udvikling' );
 }
 
+/**
+ * Læse-nøglen til GitHub (tom = offentligt repo).
+ */
+function webto_vejledning_github_token(): string {
+	foreach ( array( 'WEBTO_VEJLEDNING_GITHUB_TOKEN', 'WEBTO_GITHUB_TOKEN' ) as $name ) {
+		if ( defined( $name ) && '' !== (string) constant( $name ) ) {
+			return (string) constant( $name );
+		}
+	}
+	$file = WEBTO_VEJLEDNING_DIR . '/includes/noegle.php';
+	return is_readable( $file ) ? (string) include $file : '';
+}
+
 add_action(
 	'plugins_loaded',
 	static function () {
@@ -35,6 +49,12 @@ add_action(
 		}
 		require_once WEBTO_VEJLEDNING_DIR . '/vendor/plugin-update-checker/plugin-update-checker.php';
 		$checker = \YahnisElsts\PluginUpdateChecker\v5\PucFactory::buildUpdateChecker( $repo, WEBTO_VEJLEDNING_DIR . '/webto-vejledning.php', 'webto-vejledning' );
+		// Læse-nøgle til et privat repo (Lasse 2026-11-27): wp-config.php (WEBTO_VEJLEDNING_GITHUB_TOKEN eller WEBTO_GITHUB_TOKEN)
+		// vinder; ellers den, udgiv.sh lægger i includes/noegle.php i zip-filen (aldrig i git). Nøglen kan kun læse.
+		$token = webto_vejledning_github_token();
+		if ( '' !== $token ) {
+			$checker->setAuthentication( $token );
+		}
 		// KUN den færdige zip-fil fra udgivelsen (bygget af udgiv.sh). GitHubs automatiske kildekode-zip indeholder
 		// markøren .udvikling og ville stoppe alle senere opdateringer - mangler zip-filen, tilbydes udgivelsen ikke.
 		$checker->getVcsApi()->enableReleaseAssets( '/webto-vejledning-[0-9.]+\.zip$/', \YahnisElsts\PluginUpdateChecker\v5p7\Vcs\Api::REQUIRE_RELEASE_ASSETS );
